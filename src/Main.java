@@ -8,6 +8,14 @@ public class Main {
     private static Scanner teclado = new Scanner(System.in);
 
     public static void main(String[] args) throws InterruptedException {
+        Perro firu = new Perro("156", "Firulais", "pubg", 7, "Pequeño");
+        Perro luc = new Perro("258", "Lucas", "Pastor Aleman", 10, "Grande");
+        Perro spark = new Perro ("357", "Sparkie", "Cooker Spanish", 10, "Mediano");
+        lstPerrosDisponibles.add(firu);
+        lstPerrosDisponibles.add(luc);
+        lstPerrosDisponibles.add(spark);
+        Persona p1 = new Persona("1234", "Felipe", "Garcia", 18);
+        Persona p2 = new Persona("4567", "Luis", "Gomez", 20);
         mostrarMenu();
     }
 
@@ -44,6 +52,13 @@ public class Main {
             System.out.print("Vamos a registrar tu usuario." +
                     "\nIngrese su documento de identidad: \n= ");
             documento = teclado.nextLine();
+            for (Persona p : lstUsuarios) {
+                if (documento.equals(p.getDocumento()) && !lstUsuarios.isEmpty()) {
+                    System.out.println("Ya hay una persona registrada con ese documento.");
+                    Thread.sleep(2000);
+                    mostrarMenu();
+                }
+            }
             System.out.print("Ingrese su nombre: \n= ");
             nombre = teclado.nextLine();
             System.out.print("Ingrese su apellido: \n= ");
@@ -76,7 +91,7 @@ public class Main {
                 case 2 -> tamanio = "Mediano";
                 case 3 -> tamanio = "Grande";
             }
-            System.out.print("Ingrese la edad: \n= ");
+            System.out.print("Ingrese la edad (En años): \n= ");
             edad = teclado.nextInt();
             Perro perritoNuevo = new Perro(placa, nombre, raza, edad, tamanio);
             lstPerrosDisponibles.add(perritoNuevo);
@@ -107,7 +122,7 @@ public class Main {
                     Thread.sleep(2000);
                     mostrarMenu();
                 } else {
-                    for (Persona p : lstUsuarios) {
+                    for (Perro p : lstPerrosDisponibles) {
                         System.out.println(p.toString());
                     }
                     Thread.sleep(2000);
@@ -115,14 +130,58 @@ public class Main {
                 }
             }
             case 2 -> {
-
+                if (!lstUsuarios.isEmpty()) {
+                    teclado.nextLine();
+                    System.out.print("Ingrese su cédula o documento con el que se registró.\n= ");
+                    String doc = teclado.nextLine();
+                    for (Persona p : lstUsuarios) {
+                        if (doc.equals(p.getDocumento())) {
+                            p.perroMasGrande();
+                        } else {
+                            System.out.println("No hay usuario registrado con ese documento." +
+                                    "\nRegistrese e intente nuevamente.\n");
+                            mostrarMenu();
+                        }
+                    }
+                } else {
+                    System.out.println("Aún no hay usuarios registrados.");
+                    Thread.sleep(2000);
+                    mostrarMenu();
+                }
             }
         }
-
-
     }
 
     private static void adoptar() throws InterruptedException {
-
+        if (lstPerrosDisponibles.isEmpty()) {
+            System.out.println("No hay perritos disponibles.");
+            Thread.sleep(2000);
+            mostrarMenu();
+        } else {
+            teclado.nextLine();
+            System.out.print("Ingrese su numero de documento con el que fue registrado.\n= ");
+            String doc = teclado.nextLine();
+            for (Persona p : lstUsuarios) {
+                if (doc.equals(p.getDocumento())) {
+                    System.out.println("Que perrito desea adoptar?");
+                    int i = 1;
+                    for (Perro d : lstPerrosDisponibles) {
+                        System.out.println(i + ". " + d.toString());
+                        i++;
+                    }
+                    int eleccion = teclado.nextInt();
+                    Perro perritoSeleccionado = lstPerrosDisponibles.get(eleccion - 1);
+                    lstPerrosDisponibles.remove(eleccion-1);
+                    p.adoptarPerro(perritoSeleccionado);
+                    Thread.sleep(2000);
+                    mostrarMenu();
+                } else {
+                    System.out.println("No hay un usuario registrado con ese documento." +
+                            "\nIntente nuevamente.");
+                    Thread.sleep(2000);
+                    mostrarMenu();
+                }
+            }
+        }
     }
 }

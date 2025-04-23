@@ -7,6 +7,7 @@ public class Persona {
     private String apellido;
     private int edad, perritosAdoptados;
     private List<Perro> lstPerros = new ArrayList<Perro>();
+    private List<Perro> lstPerrosConMismaEdad = new ArrayList<Perro>();
 
     public Persona() {
     }
@@ -67,18 +68,46 @@ public class Persona {
     }
 
     public void adoptarPerro (Perro perro) {
+        if (lstPerros.size() < 3) {
+            lstPerros.add(perro);
+            perritosAdoptados++;
+            System.out.println("Felicidades, acaba de hacer a un cachorrito muy feliz.");
+        } else {
+            System.out.println("Alcanzó su límite de adopciones.");
 
+        }
     }
 
     public void perroMasGrande() {
-
+        boolean moreThanOne = false;
+        if(lstPerros.isEmpty()){
+            System.out.println("Este usuario no ha adoptado ningun perrito.");
+        } else {
+            int edadMayor = 0, edadNueva;
+            for (Perro p : lstPerros) {
+                edadNueva = p.getEdad();
+                if (edadMayor < edadNueva) {
+                    edadMayor = edadNueva;
+                    System.out.println(p.toString());
+                } else if (edadMayor == edadNueva) {
+                    System.out.println("Hay dos o más perros con la misma edad que fueron adoptados por este usuario.");
+                    lstPerrosConMismaEdad.add(p);
+                    moreThanOne = true;
+                }
+            }
+        }
+        if (moreThanOne) {
+            for (Perro p : lstPerrosConMismaEdad) {
+                System.out.println(p.toString());
+            }
+        }
     }
 
     @Override
     public String toString() {
-        String parrafo = "";
-        if (!lstPerros.isEmpty()) {
-        }
-        return parrafo;
+        return "nombre=" + nombre +
+                ", apellido= " + apellido +
+                ", edad= " + edad +
+                ", perritosAdoptados= " + perritosAdoptados;
     }
 }
